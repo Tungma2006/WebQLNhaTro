@@ -1,0 +1,60 @@
+﻿@model QLNhaTro.Models.HopDong
+
+@{
+    ViewData["Title"] = "Tạo hợp đồng mới";
+}
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white p-3">
+            <h4 class="mb-0"><i class="fas fa-pen-nib"></i> LẬP HỢP ĐỒNG MỚI</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Phòng trọ</label>
+                        <select asp-for="PhongId" class="form-select" asp-items="ViewBag.PhongId">
+                            <option value="">-- Chọn phòng --</option>
+                        </select>
+                        <span asp-validation-for="PhongId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Người thuê (Chủ hợp đồng)</label>
+                        <select asp-for="NguoiThueId" class="form-select" asp-items="ViewBag.NguoiThueId">
+                            <option value="">-- Chọn người thuê --</option>
+                        </select>
+                        <span asp-validation-for="NguoiThueId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Ngày bắt đầu</label>
+                        <input asp-for="NgayBatdau" type="date" class="form-control" />
+                        <span asp-validation-for="NgayBatdau" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Ngày kết thúc</label>
+                        <input asp-for="NgayKetThuc" type="date" class="form-control" />
+                        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Tiền đặt cọc (VNĐ)</label>
+                        <input asp-for="TienDatCoc" type="number" class="form-control" placeholder="Ví dụ: 1000000" />
+                        <span asp-validation-for="TienDatCoc" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-primary px-4">Lưu hợp đồng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

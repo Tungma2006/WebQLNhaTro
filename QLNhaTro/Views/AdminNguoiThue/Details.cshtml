@@ -1,0 +1,122 @@
+﻿@model QLNhaTro.Models.NguoiThue
+
+@{
+    ViewData["Title"] = "Chi tiết người thuê";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-container {
+        max-width: 800px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Tiêu đề có nền màu cam giống ảnh mẫu */
+    .details-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        padding: 20px 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(230, 126, 34, 0.2);
+    }
+
+        .details-header h2 {
+            color: white;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 1.6rem;
+        }
+
+    /* Các dòng thông tin */
+    .info-card {
+        display: flex;
+        align-items: center;
+        background: #fdfdfd;
+        padding: 18px 25px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border-left: 5px solid #11998e; /* Màu xanh lá làm điểm nhấn */
+        transition: all 0.3s ease;
+    }
+
+        .info-card:hover {
+            transform: translateX(5px);
+            background: #f0fff4;
+        }
+
+    .info-label {
+        flex: 0 0 180px;
+        color: #11998e;
+        font-weight: 600;
+        font-size: 1.05rem;
+    }
+
+    .info-value {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    /* Tùy chỉnh riêng cho ID */
+    .id-value {
+        color: #11998e;
+    }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 25px;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+</style>
+
+<div class="details-container">
+    <div class="details-header">
+        <h2>Chi tiết người thuê</h2>
+    </div>
+
+    <div class="info-card">
+        <div class="info-label">▪ ID người thuê</div>
+        <div class="info-value id-value">#@Model.NguoiThueId</div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-label">▪ Tên người thuê</div>
+        <div class="info-value">@Model.NguoiThueName</div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-label">▪ Số điện thoại</div>
+        <div class="info-value">@Model.PhoneNumber</div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-label">▪ Số CCCD</div>
+        <div class="info-value">@Model.CCCD</div>
+    </div>
+
+    <div style="text-align: right;">
+        <a asp-action="Index" class="btn-back">← Quay lại danh sách</a>
+    </div>
+</div>

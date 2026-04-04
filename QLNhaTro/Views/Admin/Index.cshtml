@@ -1,0 +1,164 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Trang quản trị";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+            .card i {
+                font-size: 40px;
+                margin-bottom: 15px;
+                color: white;
+            }
+
+            .card a {
+                text-decoration: none;
+                font-size: 20px;
+                font-weight: bold;
+                color: white;
+            }
+
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+                filter: brightness(1.1);
+            }
+
+        /* Màu sắc riêng biệt cho từng nút */
+        .btn-phong {
+            background: linear-gradient(45deg, #FF512F, #DD2476); /* Đỏ hồng */
+        }
+
+        .btn-nguoithue {
+            background: linear-gradient(45deg, #1D976C, #93F9B9); /* Xanh lá */
+        }
+
+        .btn-hopdong {
+            background: linear-gradient(45deg, #2193b0, #6dd5ed); /* Xanh dương */
+        }
+
+        .btn-hoadon {
+            background: linear-gradient(45deg, #f7971e, #ffd200); /* Vàng cam */
+        }
+
+        .logout {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+            .logout a {
+                text-decoration: none;
+                color: #555;
+                font-weight: bold;
+                padding: 8px 15px;
+                border-radius: 8px;
+                background: #eee;
+                transition: 0.3s;
+            }
+
+                .logout a:hover {
+                    background: #ff4d4d;
+                    color: white;
+                }
+
+        /* Mobile responsive */
+        @@media (max-width: 600px) {
+            .menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="logout">
+            <a href="@Url.Action("Logout", "Account")"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+
+        <h1>Hệ Thống Quản Lý</h1>
+
+        <div class="menu">
+            <div class="card btn-phong" onclick="location.href='@Url.Action("Phong", "Admin")'">
+                <i class="fas fa-door-open"></i>
+                <a href="@Url.Action("Phong", "Admin")">Quản lý phòng</a>
+            </div>
+
+            <div class="card btn-nguoithue" onclick="location.href='@Url.Action("NguoiThue", "Admin")'">
+                <i class="fas fa-users"></i>
+                <a href="@Url.Action("NguoiThue", "Admin")">Quản lý người thuê</a>
+            </div>
+
+            <div class="card btn-hopdong" onclick="location.href='@Url.Action("HopDong", "Admin")'">
+                <i class="fas fa-file-signature"></i>
+                <a href="@Url.Action("HopDong", "Admin")">Quản lý hợp đồng</a>
+            </div>
+
+            <div class="card btn-hoadon" onclick="location.href='@Url.Action("HoaDon", "Admin")'">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <a href="@Url.Action("HoaDon", "Admin")">Quản lý hóa đơn</a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+﻿@model IEnumerable<QLNhaTro.Models.HopDong>
+
+@{
+    ViewData["Title"] = "Danh sách hợp đồng";
+}
+
+<style>
+    /* Header section */
+    .page-header {
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(17, 153, 142, 0.2);
+    }
+
+        .page-header h2 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    /* Search area */
+    .search-container {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 12px 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+        .search-input:focus {
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+    .btn-main {
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-add {
+        background: white;
+        color: #11998e;
+    }
+
+        .btn-add:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+    .btn-search {
+        background: #2c3e50;
+        color: white;
+    }
+
+        .btn-search:hover {
+            background: #1a252f;
+        }
+
+    /* Table styles */
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .custom-table thead {
+            background: linear-gradient(45deg, #2193b0, #6dd5ed);
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        .custom-table th {
+            padding: 18px;
+            text-align: left;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .custom-table td {
+            padding: 18px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+            color: #2d3748;
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #f7fafc;
+        }
+
+    /* UI Components */
+    .id-badge {
+        background: #edf2f7;
+        color: #4a5568;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .room-name {
+        color: #11998e;
+        font-weight: 700;
+    }
+
+    .price-tag {
+        color: #e67e22;
+        font-weight: 700;
+    }
+
+    .action-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .btn-icon {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: white !important;
+        transition: 0.3s;
+    }
+
+    .btn-info {
+        background: #3498db;
+    }
+
+
+    .btn-danger {
+        background: #e74c3c;
+    }
+
+    .btn-icon:hover {
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-file-contract"></i> Quản lý hợp đồng</h2>
+    <a asp-action="Create" class="btn-main btn-add">
+        <span>+ Lập hợp đồng mới</span>
+    </a>
+</div>
+
+<form method="get" class="search-container">
+    <input type="text" name="keyword" value="@ViewBag.Keyword" class="search-input" placeholder="Tìm theo tên người thuê hoặc số hợp đồng..." />
+    <button type="submit" class="btn-main btn-search">Tìm kiếm</button>
+</form>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th style="width: 80px;">ID</th>
+                <th>Phòng</th>
+                <th>Người đại diện</th>
+                <th>Thời hạn</th>
+                <th>Tiền đặt cọc</th>
+                <th style="text-align: center;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span class="id-badge">#@item.HopDongId</span></td>
+                        <td><span class="room-name">@(item.Phong?.TenPhong ?? "Chưa gán")</span></td>
+                        <td><span class="room-name">@(item.NguoiThue?.NguoiThueName ?? "Chưa gán")</span></td>
+                        <td>
+                            <div style="font-size: 0.9rem;">
+                                <div><i class="far fa-calendar-check"></i> @item.NgayBatdau.ToString("dd/MM/yyyy")</div>
+                                <div class="text-muted"><i class="far fa-calendar-times"></i> @item.NgayKetThuc.ToString("dd/MM/yyyy")</div>
+                            </div>
+                        </td>
+                        <td><span class="price-tag">@String.Format("{0:N0}đ", item.TienDatCoc)</span></td>
+                        <td>
+                            <div class="action-group">
+                                <a asp-action="Details" asp-route-id="@item.HopDongId" class="btn-icon btn-info" title="Xem chi tiết">👁</a>
+                                
+                                <a asp-action="Delete" asp-route-id="@item.HopDongId" class="btn-icon btn-danger"
+                                   onclick="return confirm('Bạn có chắc muốn xóa hợp đồng này không?')" title="Xóa">🗑</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 50px; color: #a0aec0;">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; display: block; margin-bottom: 10px;"></i>
+                        Không tìm thấy hợp đồng nào
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,268 @@
+﻿@model QLNhaTro.Models.Phong
+
+@{
+    ViewData["Title"] = "Chi tiết phòng";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(17, 153, 142, 0.2);
+    }
+
+        .page-header h2 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
+        }
+
+    .details-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        max-width: 700px;
+        margin: 0 auto 20px;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .details-header {
+        background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+        padding: 20px 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(230, 126, 34, 0.2);
+    }
+
+        .details-header h2 {
+            color: white;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 1.6rem;
+        }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+        .detail-item:hover {
+            border-left-color: #11998e;
+            background: #f0fdf4;
+            transform: translateX(5px);
+        }
+
+    .detail-label {
+        font-weight: 700;
+        color: #11998e;
+        min-width: 150px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .detail-label::before {
+            content: "▪";
+            font-size: 1.2rem;
+            color: #38ef7d;
+        }
+
+    .detail-value {
+        color: #333;
+        font-size: 1rem;
+        flex: 1;
+    }
+
+    .detail-id {
+        font-weight: 700;
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 1.1rem;
+    }
+
+    .detail-price {
+        color: #e74c3c;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .detail-status {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-empty {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-occupied {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-maintenance {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .action-footer {
+        max-width: 700px;
+        margin: 0 auto;
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-back {
+        flex: 1;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .btn-back:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+
+    .btn-edit {
+        flex: 1;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #f39c12, #f1c40f);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .btn-edit:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            color: white;
+        }
+    
+    .btn-back {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 25px;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    @@media (max-width: 768px) {
+        .detail-item
+
+        {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+    .detail-label {
+        min-width: auto;
+    }
+
+    }
+</style>
+
+<div class="page-header">
+    <h2>Chi tiết phòng</h2>
+</div>
+
+<div class="details-container">
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">ID phòng</span>
+            <span class="detail-value detail-id">#@Model.PhongId</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Tên phòng</span>
+            <span class="detail-value"><strong>@Model.TenPhong</strong></span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Giá phòng</span>
+            <span class="detail-value detail-price">@Model.GiaPhong.ToString("N0") VNĐ</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Diện tích</span>
+            <span class="detail-value">@Model.DienTich m²</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Số người tối đa</span>
+            <span class="detail-value">@Model.SoNguoiToiDa người</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">Trạng thái</span>
+            <span class="detail-value">
+                @if (Model.Trangthai == "Trống")
+                {
+                    <span class="detail-status status-empty">✓ Trống</span>
+                }
+                else if (Model.Trangthai == "Đã thuê")
+                {
+                    <span class="detail-status status-occupied">● Đã thuê</span>
+                }
+                else
+                {
+                    <span class="detail-status status-maintenance">⚠ @Model.Trangthai</span>
+                }
+            </span>
+        </div>
+        <div style="text-align: right;">
+            <a asp-action="Index" class="btn-back">← Quay lại danh sách</a>
+        </div>
+    </div>
+</div>
