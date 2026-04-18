@@ -11,7 +11,7 @@ namespace QLNhaTro.Data
         public DbSet<Phong> Phongs { get; set; }
         public DbSet<HopDong> HopDongs { get; set; }
         public DbSet<HoaDon> HoaDons { get; set; }
-        public DbSet<ThanhToan> ThanhToans { get; set; }
+        public DbSet<ThongBao> ThongBaos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {
@@ -37,11 +37,11 @@ namespace QLNhaTro.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // 4. Cấu hình quan hệ: HoaDon (1) - ThanhToan (n)
-            modelBuilder.Entity<ThanhToan>()
-                .HasOne(tt => tt.HoaDon)
-                .WithMany(hd => hd.ThanhToans)
-                .HasForeignKey(tt => tt.HoaDonId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<ThanhToan>()
+            //    .HasOne(tt => tt.HoaDon)
+            //    .WithMany(hd => hd.ThanhToans)
+            //    .HasForeignKey(tt => tt.HoaDonId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
 
             // Cấu hình cho tất cả các cột decimal trong toàn bộ Database là (18)

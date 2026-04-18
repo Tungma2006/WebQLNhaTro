@@ -51,15 +51,16 @@ namespace QLNhaTro.Migrations
                 {
                     HoaDonId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Thang = table.Column<DateOnly>(type: "date", nullable: false),
+                    Thang = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SoDienTieuThu = table.Column<int>(type: "int", nullable: false),
                     SoNuocTieuThu = table.Column<int>(type: "int", nullable: false),
                     TienDien = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     TienNuoc = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     TienPhong = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     TongTien = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    TrangthaiThanhToan = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HopDongId = table.Column<int>(type: "int", nullable: false)
+                    TrangthaiThanhToan = table.Column<int>(type: "int", nullable: false),
+                    HopDongId = table.Column<int>(type: "int", nullable: false),
+                    AnhThanhToan = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,7 +78,7 @@ namespace QLNhaTro.Migrations
                     TienDatCoc = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     PhongId = table.Column<int>(type: "int", nullable: false),
                     NguoiThueId = table.Column<int>(type: "int", nullable: false),
-                    HoaDonId = table.Column<int>(type: "int", nullable: false)
+                    HoaDonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -86,8 +87,7 @@ namespace QLNhaTro.Migrations
                         name: "FK_HopDongs_HoaDons_HoaDonId",
                         column: x => x.HoaDonId,
                         principalTable: "HoaDons",
-                        principalColumn: "HoaDonId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "HoaDonId");
                     table.ForeignKey(
                         name: "FK_HopDongs_NguoiThues_NguoiThueId",
                         column: x => x.NguoiThueId,
@@ -101,23 +101,25 @@ namespace QLNhaTro.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ThanhToans",
+                name: "ThongBaos",
                 columns: table => new
                 {
-                    ThanhToanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SoTien = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
-                    NgayThanhToan = table.Column<DateOnly>(type: "date", nullable: false),
+                    NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DaDoc = table.Column<bool>(type: "bit", nullable: false),
                     HoaDonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ThanhToans", x => x.ThanhToanId);
+                    table.PrimaryKey("PK_ThongBaos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ThanhToans_HoaDons_HoaDonId",
+                        name: "FK_ThongBaos_HoaDons_HoaDonId",
                         column: x => x.HoaDonId,
                         principalTable: "HoaDons",
-                        principalColumn: "HoaDonId");
+                        principalColumn: "HoaDonId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -141,8 +143,8 @@ namespace QLNhaTro.Migrations
                 column: "PhongId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ThanhToans_HoaDonId",
-                table: "ThanhToans",
+                name: "IX_ThongBaos_HoaDonId",
+                table: "ThongBaos",
                 column: "HoaDonId");
 
             migrationBuilder.AddForeignKey(
@@ -161,7 +163,7 @@ namespace QLNhaTro.Migrations
                 table: "HoaDons");
 
             migrationBuilder.DropTable(
-                name: "ThanhToans");
+                name: "ThongBaos");
 
             migrationBuilder.DropTable(
                 name: "HopDongs");

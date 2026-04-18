@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using QLNhaTro.Data;
+using QLNhaTro.Enums;
+using QLNhaTro.Models;
 using QLNhaTro.Services;
 
 namespace QLNhaTro.Controllers
@@ -7,13 +12,16 @@ namespace QLNhaTro.Controllers
     {
         private readonly HoaDonService _hoaDonService;
         private readonly HopDongService _hopDongService;
+        private readonly NhaTroDbContext _context;
 
         public TenantController(
             HoaDonService hoaDonService,
-            HopDongService hopDongService)
+            HopDongService hopDongService,
+           NhaTroDbContext context)
         {
             _hoaDonService = hoaDonService;
             _hopDongService = hopDongService;
+            _context = context;
         }
 
          
@@ -56,6 +64,40 @@ namespace QLNhaTro.Controllers
             if (hd == null) return NotFound();
 
             return View(hd);
+        }
+        [HttpPost]
+        public IActionResult UploadThanhToan(int id, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest();
+
+            // 📁 lưu file
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            // 🔍 lấy hóa đơn
+            var hoaDon = _hoaDonService.GetById(id);
+            if (hoaDon == null) return NotFound();
+
+            // 💾 cập nhật hóa đơn
+            hoaDon.AnhThanhToan = "/images/" + fileName;
+            _hoaDonService.Update(hoaDon);
+
+            // 🔔 👉 ĐẶT Ở ĐÂY (sau khi xử lý xong)
+            _context.ThongBaos.Add(new ThongBao
+            {
+                NoiDung = $"Hóa đơn #{hoaDon.HoaDonId} đã gửi thanh toán",
+                HoaDonId = hoaDon.HoaDonId
+            });
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

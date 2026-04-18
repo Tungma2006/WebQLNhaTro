@@ -1,5 +1,257 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model QLNhaTro.Models.HoaDon
+
 @{
+    ViewData["Title"] = "Tạo hóa đơn";
 }
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    /* Form Header */
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .form-header h2 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+    /* Form Body */
+    form {
+        padding: 40px;
+    }
+
+    /* Form Groups */
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            transition: color 0.3s ease;
+        }
+
+    /* Form Controls */
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #2d3748;
+        background-color: #f7fafc;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-sizing: border-box;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-control:hover,
+        .form-select:hover {
+            border-color: #cbd5e0;
+            background-color: #ffffff;
+        }
+
+        /* Placeholder */
+        .form-control::placeholder {
+            color: #a0aec0;
+            opacity: 1;
+        }
+
+    /* Select Dropdown */
+    .form-select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%234a5568' d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        padding-right: 45px;
+    }
+
+        .form-select:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23667eea' d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        }
+
+        .form-select option {
+            padding: 10px;
+        }
+
+            .form-select option[value=""] {
+                color: #a0aec0;
+            }
+
+    /* Month Input */
+    input[type="month"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        border-radius: 4px;
+        padding: 5px;
+        filter: brightness(0.8);
+        transition: all 0.3s ease;
+    }
+
+        input[type="month"]::-webkit-calendar-picker-indicator:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+            filter: brightness(1);
+        }
+
+    /* Number Input */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    /* Validation Messages */
+    .text-danger {
+        color: #e53e3e;
+        font-size: 13px;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+        animation: shake 0.3s ease;
+    }
+
+    @@keyframes shake {
+        0%, 100%
+
+    {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+
+    }
+
+    /* Button Container */
+    .col-12 {
+        margin-top: 35px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 14px 32px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(72, 187, 120, 0.3);
+        }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h2>Thêm phòng</h2>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label>Tháng</label>
+            <input asp-for="Thang" type="month" class="form-control" placeholder="Nhập tháng" />
+            <span asp-validation-for="Thang" class="text-danger"></span>
+        </div>
+
+        <!-- 🏠 Hợp đồng -->
+        <div class="form-group">
+            <label asp-for="HopDongId" class="form-label">Hợp đồng</label>
+            <select asp-for="HopDongId" asp-items="ViewBag.HopDongs" class="form-select">
+                <option value="">-- Chọn hợp đồng --</option>
+            </select>
+            <span asp-validation-for="HopDongId" class="text-danger"></span>
+        </div>
+
+        <!-- ⚡ Số điện -->
+        <div class="form-group">
+            <label asp-for="SoDienTieuThu" class="form-label">Số điện tiêu thụ</label>
+            <input asp-for="SoDienTieuThu" class="form-control" type="number" />
+            <span asp-validation-for="SoDienTieuThu" class="text-danger"></span>
+        </div>
+
+        <!-- 💧 Số nước -->
+        <div class="form-group">
+            <label asp-for="SoNuocTieuThu" class="form-label">Số nước tiêu thụ</label>
+            <input asp-for="SoNuocTieuThu" class="form-control" type="number" />
+            <span asp-validation-for="SoNuocTieuThu" class="text-danger"></span>
+        </div>
+
+        <!-- 🎯 Nút -->
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">
+                💾 Lưu hóa đơn
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                ← Quay lại
+            </a>
+        </div>
+    </form>
+</div>

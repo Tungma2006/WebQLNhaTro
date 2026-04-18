@@ -30,6 +30,9 @@ namespace QLNhaTro.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoaDonId"));
 
+                    b.Property<string>("AnhThanhToan")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("HopDongId")
                         .HasColumnType("int");
 
@@ -39,8 +42,8 @@ namespace QLNhaTro.Migrations
                     b.Property<int>("SoNuocTieuThu")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("Thang")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Thang")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("TienDien")
                         .HasColumnType("decimal(18)");
@@ -54,9 +57,8 @@ namespace QLNhaTro.Migrations
                     b.Property<decimal>("TongTien")
                         .HasColumnType("decimal(18)");
 
-                    b.Property<string>("TrangthaiThanhToan")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TrangthaiThanhToan")
+                        .HasColumnType("int");
 
                     b.HasKey("HoaDonId");
 
@@ -165,28 +167,32 @@ namespace QLNhaTro.Migrations
                     b.ToTable("Phongs");
                 });
 
-            modelBuilder.Entity("QLNhaTro.Models.ThanhToan", b =>
+            modelBuilder.Entity("ThongBao", b =>
                 {
-                    b.Property<int>("ThanhToanId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ThanhToanId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("DaDoc")
+                        .HasColumnType("bit");
 
                     b.Property<int>("HoaDonId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("NgayThanhToan")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal>("SoTien")
-                        .HasColumnType("decimal(18)");
+                    b.Property<string>("NoiDung")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ThanhToanId");
+                    b.HasKey("Id");
 
                     b.HasIndex("HoaDonId");
 
-                    b.ToTable("ThanhToans");
+                    b.ToTable("ThongBaos");
                 });
 
             modelBuilder.Entity("QLNhaTro.Models.HoaDon", b =>
@@ -225,20 +231,15 @@ namespace QLNhaTro.Migrations
                     b.Navigation("Phong");
                 });
 
-            modelBuilder.Entity("QLNhaTro.Models.ThanhToan", b =>
+            modelBuilder.Entity("ThongBao", b =>
                 {
                     b.HasOne("QLNhaTro.Models.HoaDon", "HoaDon")
-                        .WithMany("ThanhToans")
+                        .WithMany()
                         .HasForeignKey("HoaDonId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HoaDon");
-                });
-
-            modelBuilder.Entity("QLNhaTro.Models.HoaDon", b =>
-                {
-                    b.Navigation("ThanhToans");
                 });
 
             modelBuilder.Entity("QLNhaTro.Models.HopDong", b =>

@@ -1,5 +1,554 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<QLNhaTro.Models.HoaDon>
+
 @{
+    Layout = null;
+    ViewData["Title"] = "Hóa đơn của tôi";
 }
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Page Container */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Page Title */
+    h2 {
+        color: #ffffff;
+        font-size: 36px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    /* Empty State */
+    body > p {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        color: #718096;
+        font-size: 18px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Invoice Card */
+    .card {
+        background: #ffffff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .card.mb-4 {
+            margin-bottom: 30px !important;
+        }
+
+        .card.p-3 {
+            padding: 35px !important;
+        }
+
+        /* Card Headings */
+        .card h5 {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .card h5:first-child::before {
+                content: "🏠";
+                font-size: 24px;
+            }
+
+            .card h5:nth-of-type(2)::before {
+                content: "💳";
+                font-size: 22px;
+            }
+
+        /* Paragraphs in Card */
+        .card p {
+            color: #4a5568;
+            font-size: 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+            .card p strong {
+                color: #2d3748;
+                font-weight: 600;
+                min-width: 150px;
+                display: inline-block;
+            }
+
+        /* Horizontal Rule */
+        .card hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+            margin: 25px 0;
+        }
+
+        /* Price Information */
+        .card p:has(+ p):nth-last-of-type(n+4) {
+            font-size: 15px;
+        }
+
+        /* Total Price */
+        .card h5.text-danger {
+            background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 5px solid #e74c3c;
+            font-size: 24px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
+        }
+
+            .card h5.text-danger::before {
+                content: "💰";
+                margin-right: 10px;
+            }
+
+    /* Status Badges */
+    .badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-block;
+        letter-spacing: 0.3px;
+    }
+
+        .badge.bg-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+            color: white;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+            .badge.bg-success::before {
+                content: "✓ ";
+                font-weight: 700;
+            }
+
+        .badge.bg-warning {
+            background: linear-gradient(135deg, #f6e05e 0%, #ecc94b 100%) !important;
+            color: #744210 !important;
+            box-shadow: 0 4px 12px rgba(246, 224, 94, 0.3);
+        }
+
+            .badge.bg-warning::before {
+                content: "⏳ ";
+            }
+
+    /* Bank Info Section */
+    .card h5:nth-of-type(2) {
+        margin-top: 20px;
+        padding-top: 10px;
+    }
+
+    /* QR Code Image */
+    .card img[width="200"] {
+        max-width: 200px;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        border: 4px solid #f7fafc;
+        margin: 20px 0;
+        transition: transform 0.3s ease;
+        display: block;
+    }
+
+        .card img[width="200"]:hover {
+            transform: scale(1.05);
+        }
+
+    /* Upload Form */
+    form[enctype="multipart/form-data"] {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+        padding: 25px;
+        border-radius: 15px;
+        border: 2px dashed #cbd5e0;
+        margin-top: 15px;
+    }
+
+    /* File Input */
+    .form-control[type="file"] {
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        background-color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .form-control[type="file"]:hover {
+            border-color: #cbd5e0;
+            background-color: #f7fafc;
+        }
+
+        .form-control[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+    .form-control.mb-2 {
+        margin-bottom: 15px !important;
+    }
+
+    /* Upload Success Message */
+    .text-success {
+        background: linear-gradient(135deg, #f0fff4 0%, #e6ffed 100%);
+        border-left: 5px solid #48bb78;
+        padding: 15px 20px;
+        border-radius: 12px;
+        color: #22543d !important;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.1);
+        margin-bottom: 15px;
+    }
+
+        .text-success::before {
+            content: "✓";
+            font-size: 24px;
+            color: #48bb78;
+            font-weight: 700;
+        }
+
+        /* Uploaded Payment Image */
+        .text-success + img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            border: 3px solid #48bb78;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+            .text-success + img:hover {
+                transform: scale(1.1);
+            }
+
+    /* Buttons */
+    .btn {
+        padding: 14px 32px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #64398c 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+    .btn-info {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        color: white;
+        margin-top: 30px;
+        display: inline-flex;
+        box-shadow: 0 6px 20px rgba(66, 153, 225, 0.3);
+    }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(66, 153, 225, 0.4);
+            color: white;
+        }
+
+        .btn-info::after {
+            content: "→";
+            font-size: 18px;
+        }
+
+    /* Hidden Input */
+    input[type="hidden"] {
+        display: none;
+    }
+
+    /* Animations */
+    @@keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Stagger animation for multiple cards */
+    .card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        body
+
+    {
+        padding: 20px 15px;
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .card.p-3 {
+        padding: 25px 20px !important;
+    }
+
+    .card h5 {
+        font-size: 18px;
+    }
+
+        .card h5.text-danger {
+            font-size: 20px;
+            padding: 12px 15px;
+        }
+
+    .card p {
+        font-size: 15px;
+    }
+
+        .card p strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .card img[width="200"] {
+        max-width: 100%;
+    }
+
+    form[enctype="multipart/form-data"] {
+        padding: 20px;
+    }
+
+    }
+
+    @@media (max-width: 480px) {
+        h2
+
+    {
+        font-size: 24px;
+    }
+
+    .card.p-3 {
+        padding: 20px 15px !important;
+    }
+
+    .card h5 {
+        font-size: 17px;
+    }
+
+        .card h5.text-danger {
+            font-size: 19px;
+        }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    }
+
+    /* Print Styles */
+    @@media print {
+        body
+
+    {
+        background: white;
+        padding: 0;
+    }
+
+    .btn {
+        display: none;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: none;
+    }
+
+    }
+
+    /* Focus Styles for Accessibility */
+    .btn:focus-visible,
+    .form-control:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 2px;
+    }
+
+    /* Loading State */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+        .btn:disabled:hover {
+            transform: none !important;
+        }
+</style>
+<h2>Hóa đơn tháng hiện tại</h2>
+
+@if (!Model.Any())
+{
+    <p>Không có hóa đơn</p>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <div class="card mb-4 p-3">
+            <h5>Phòng: @item.HopDong?.Phong?.TenPhong</h5>
+            <p>Tháng: @item.Thang</p>
+
+            <hr />
+
+            <p>Tiền phòng: @item.TienPhong.ToString("N0") đ</p>
+            <p>Tiền điện: @item.TienDien.ToString("N0") đ</p>
+            <p>Tiền nước: @item.TienNuoc.ToString("N0") đ</p>
+
+            <h5 class="text-danger">
+                Tổng: @item.TongTien.ToString("N0") đ
+            </h5>
+
+            <p>
+                Trạng thái:
+                @if (item.TrangthaiThanhToan.ToString() == "DaThanhToan")
+                {
+                    <span class="badge bg-success">Đã thanh toán</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Chưa thanh toán</span>
+                }
+            </p>
+
+            <hr />
+
+            <!-- 💳 THÔNG TIN CHUYỂN KHOẢN -->
+            <h5>Thông tin chuyển khoản</h5>
+            <p><strong>Chủ tài khoản:</strong> Tùng</p>
+            <p><strong>Ngân hàng:</strong> Vietcombank</p>
+            <p><strong>Số tài khoản:</strong> 123456789</p>
+
+            <!-- 📱 QR -->
+            <img src="~/images/z7725775142305_66f6ef61c26b3913938c5c1f76f75ef2.jpg" width="200" />
+
+            <hr />
+
+            <!-- 📤 Upload -->
+            @if (string.IsNullOrEmpty(item.AnhThanhToan))
+            {
+                <form asp-action="UploadThanhToan" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="@item.HoaDonId" />
+                    <input type="file" name="file" class="form-control mb-2" required />
+                    <button type="submit" class="btn btn-primary">Gửi ảnh chuyển khoản</button>
+                </form>
+            }
+            else
+            {
+                <p class="text-success">Đã gửi ảnh thanh toán</p>
+                <img src="@item.AnhThanhToan" width="150" />
+            }
+        </div>
+    }
+}
+
+<!-- 👉 Nút sang hợp đồng -->
+<a asp-action="HopDong" class="btn btn-info">
+    Xem hợp đồng của tôi
+</a>

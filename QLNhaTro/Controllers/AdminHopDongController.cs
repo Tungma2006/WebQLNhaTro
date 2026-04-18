@@ -7,12 +7,12 @@ using QLNhaTro.Services;
 
 namespace QLNhaTro.Controllers
 {
-    public class AdminHopDongController : Controller
+    public class AdminHopDongController : BaseController
     {
         private readonly HopDongService _service;
         private readonly NhaTroDbContext _context;
 
-        public AdminHopDongController(HopDongService service, NhaTroDbContext context)
+        public AdminHopDongController(HopDongService service, NhaTroDbContext context) : base(context)
         {
             _service = service;
             _context = context;
@@ -20,6 +20,8 @@ namespace QLNhaTro.Controllers
 
         public IActionResult Index(string keyword)
         {
+            LoadThongBao();
+
             var data = _service.Search(keyword);
             ViewBag.Keyword = keyword;
             return View(data);

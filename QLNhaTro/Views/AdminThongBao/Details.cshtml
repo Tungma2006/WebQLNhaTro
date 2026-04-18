@@ -1,0 +1,38 @@
+﻿@model QLNhaTro.Models.ThongBao
+
+@{
+    ViewData["Title"] = "Chi tiết thông báo";
+}
+
+<div class="notification-detail">
+    <h2>Chi tiết thông báo</h2>
+
+    @if (Model == null)
+    {
+        <p class="text-danger">Không tìm thấy thông báo</p>
+    }
+    else
+    {
+        <div class="info-card">
+            <p><strong>Nội dung:</strong> @Model.NoiDung</p>
+        </div>
+
+        <hr />
+
+        <div class="image-container">
+            @if (Model.HoaDon != null && !string.IsNullOrEmpty(Model.HoaDon.AnhThanhToan))
+            {
+                <p><strong>Ảnh thanh toán:</strong></p>
+                <img src="@Url.Content(Model.HoaDon.AnhThanhToan)"
+                     alt="Ảnh thanh toán"
+                     title="Click để phóng to" />
+            }
+            else
+            {
+                <p class="text-warning">Chưa có ảnh thanh toán</p>
+            }
+        </div>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary mt-3">← Quay lại</a>
+</div>

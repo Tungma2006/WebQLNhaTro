@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model QLNhaTro.Models.HoaDonViewModel
+
+<h2>Chi tiết hóa đơn</h2>
+
+<div class="card p-3">
+    <p><strong>Phòng:</strong> @Model.TenPhong</p>
+    <p><strong>Tháng:</strong> @Model.Thang</p>
+    <p><strong>Số điện:</strong> @Model.SoDienTieuThu</p>
+    <p><strong>Số nước:</strong> @Model.SoNuocTieuThu</p>
+    <p><strong>Tiền điện:</strong> @Model.TienDien</p>
+    <p><strong>Tiền nước:</strong> @Model.TienNuoc</p>
+    <p><strong>Tiền phòng:</strong> @Model.TienPhong</p>
+    <p><strong>Tổng tiền:</strong> @Model.TongTien</p>
+    <p><strong>Trạng thái:</strong> @Model.TrangthaiThanhToan</p>
+</div>
+
+<div class="btn-group">
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    <button onclick="window.print()" class="btn btn-primary">In hợp đồng</button>
+</div>

@@ -1,5 +1,553 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<QLNhaTro.Models.HopDong>
+
 @{
+    Layout = null;
+    ViewData["Title"] = "Hợp đồng";
 }
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Page Container */
+    .page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Page Title */
+    h2 {
+        color: #ffffff;
+        font-size: 36px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+        h2::before {
+            content: "📋 ";
+            margin-right: 10px;
+        }
+
+    /* Table Container */
+    .table-container {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        margin-bottom: 30px;
+    }
+
+    /* Table Styling */
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+    .table-bordered {
+        border: none;
+    }
+
+    /* Table Header */
+    .table thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+        .table thead tr {
+            border: none;
+        }
+
+        .table thead th {
+            padding: 18px 20px;
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            border: none;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+            .table thead th:first-child {
+                border-top-left-radius: 12px;
+            }
+
+            .table thead th:last-child {
+                border-top-right-radius: 12px;
+                text-align: center;
+            }
+
+    /* Table Body */
+    .table tbody tr {
+        background: #ffffff;
+        transition: all 0.3s ease;
+        border-bottom: 2px solid #f7fafc;
+    }
+
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+            .table tbody tr:last-child td:first-child {
+                border-bottom-left-radius: 12px;
+            }
+
+            .table tbody tr:last-child td:last-child {
+                border-bottom-right-radius: 12px;
+            }
+
+    /* Table Cells */
+    .table tbody td {
+        padding: 20px;
+        font-size: 15px;
+        color: #2d3748;
+        border: none;
+        vertical-align: middle;
+    }
+
+        .table tbody td:first-child {
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+            .table tbody td:first-child::before {
+                content: "🏠 ";
+                margin-right: 5px;
+            }
+
+        /* Date Cells */
+        .table tbody td:nth-child(2)::before {
+            content: "📅 ";
+            margin-right: 5px;
+            opacity: 0.6;
+        }
+
+        .table tbody td:nth-child(3)::before {
+            content: "📅 ";
+            margin-right: 5px;
+            opacity: 0.6;
+        }
+
+        /* Money Cell */
+        .table tbody td:nth-child(4) {
+            font-weight: 700;
+            color: #38a169;
+            font-size: 16px;
+        }
+
+            .table tbody td:nth-child(4)::before {
+                content: "💰 ";
+                margin-right: 5px;
+            }
+
+        /* Action Cell */
+        .table tbody td:last-child {
+            text-align: center;
+        }
+
+    /* Buttons */
+    .btn {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Small Button */
+    .btn-sm {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    /* Primary Button */
+    .btn-primary {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary::after {
+            content: "→";
+            font-size: 16px;
+        }
+
+    /* Secondary Button */
+    .btn-secondary {
+        background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        color: white;
+        box-shadow: 0 6px 20px rgba(113, 128, 150, 0.3);
+    }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(113, 128, 150, 0.4);
+            color: white;
+        }
+
+        .btn-secondary::before {
+            content: "←";
+            font-size: 16px;
+        }
+
+    /* Empty State */
+    .table tbody:empty::after {
+        content: "Không có hợp đồng nào";
+        display: block;
+        text-align: center;
+        padding: 60px 20px;
+        color: #a0aec0;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    /* Animations */
+    @@keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Stagger animation for table rows */
+    .table tbody tr:nth-child(1) {
+        animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .table tbody tr:nth-child(2) {
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .table tbody tr:nth-child(3) {
+        animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .table tbody tr:nth-child(4) {
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .table tbody tr:nth-child(5) {
+        animation: fadeInUp 0.6s ease-out 0.5s both;
+    }
+
+    .table tbody tr:nth-child(n+6) {
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 992px) {
+        h2
+
+    {
+        font-size: 30px;
+    }
+
+    .table-container {
+        padding: 25px 20px;
+        overflow-x: auto;
+    }
+
+    .table {
+        min-width: 700px;
+    }
+
+        .table thead th,
+        .table tbody td {
+            padding: 15px;
+            font-size: 14px;
+        }
+
+    }
+
+    @@media (max-width: 768px) {
+        body
+
+    {
+        padding: 20px 10px;
+    }
+
+    h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+
+    .table-container {
+        padding: 20px 15px;
+        border-radius: 15px;
+    }
+
+    /* Stack table for mobile */
+    .table,
+    .table thead,
+    .table tbody,
+    .table th,
+    .table td,
+    .table tr {
+        display: block;
+    }
+
+    .table {
+        min-width: 100%;
+    }
+
+        .table thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .table tbody tr {
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            background: #ffffff;
+        }
+
+            .table tbody tr:hover {
+                transform: scale(1);
+            }
+
+            .table tbody tr:last-child td:first-child,
+            .table tbody tr:last-child td:last-child {
+                border-radius: 0;
+            }
+
+        .table tbody td {
+            padding: 12px 10px;
+            text-align: left !important;
+            position: relative;
+            padding-left: 50%;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+            .table tbody td:last-child {
+                border-bottom: none;
+                padding-left: 10px;
+                text-align: center !important;
+            }
+
+            .table tbody td::before {
+                content: attr(data-label) !important;
+                position: absolute;
+                left: 10px;
+                font-weight: 700;
+                color: #4a5568;
+                text-transform: uppercase;
+                font-size: 12px;
+                letter-spacing: 0.5px;
+            }
+
+            .table tbody td:nth-child(1)::before {
+                content: "🏠 Phòng" !important;
+            }
+
+            .table tbody td:nth-child(2)::before {
+                content: "📅 Ngày bắt đầu" !important;
+            }
+
+            .table tbody td:nth-child(3)::before {
+                content: "📅 Ngày kết thúc" !important;
+            }
+
+            .table tbody td:nth-child(4)::before {
+                content: "💰 Tiền cọc" !important;
+            }
+
+            .table tbody td:nth-child(5)::before {
+                content: "" !important;
+            }
+
+    .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    }
+
+    @@media (max-width: 480px) {
+        h2
+
+    {
+        font-size: 24px;
+    }
+
+    .table-container {
+        padding: 15px 10px;
+    }
+
+    .table tbody tr {
+        padding: 12px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+
+    }
+
+    /* Print Styles */
+    @@media print {
+        body
+
+    {
+        background: white;
+        padding: 0;
+    }
+
+    h2 {
+        color: #2d3748;
+        text-shadow: none;
+    }
+
+    .table-container {
+        box-shadow: none;
+    }
+
+    .table thead {
+        background: #f7fafc !important;
+        color: #2d3748 !important;
+    }
+
+        .table thead th {
+            color: #2d3748 !important;
+        }
+
+    .btn {
+        display: none;
+    }
+
+    .table tbody tr:hover {
+        background: #ffffff;
+        transform: none;
+        box-shadow: none;
+    }
+
+    }
+
+    /* Focus Styles for Accessibility */
+    .btn:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 2px;
+    }
+
+    /* Loading State */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+        .btn:disabled:hover {
+            transform: none !important;
+        }
+
+    /* Scrollbar Styling */
+    .table-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+    }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #64398c 100%);
+        }
+</style>
+<h2>Danh sách hợp đồng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Phòng</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Tiền cọc</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Phong?.TenPhong</td>
+                <td>@item.NgayBatdau</td>
+                <td>@item.NgayKetThuc</td>
+                <td>@item.TienDatCoc.ToString("N0") đ</td>
+                <td>
+                    <a asp-action="HopDongDetail" asp-route-id="@item.HopDongId"
+                       class="btn btn-sm btn-primary">
+                        Chi tiết
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Quay lại</a>

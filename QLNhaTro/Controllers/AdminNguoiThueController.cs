@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QLNhaTro.Services;
+using QLNhaTro.Data;
 using QLNhaTro.Models;
+using QLNhaTro.Services;
 
 namespace QLNhaTro.Controllers
 {
-    public class AdminNguoiThueController : Controller
+    public class AdminNguoiThueController : BaseController
     {
         private readonly NguoiThueService _service;
 
-        public AdminNguoiThueController(NguoiThueService service)
+        public AdminNguoiThueController(NhaTroDbContext context, NguoiThueService service) : base(context)
         {
             _service = service;
         }
 
         public IActionResult Index(string keyword)
         {
+            LoadThongBao();
             var data = _service.Search(keyword);
             ViewBag.Keyword = keyword;
             return View(data);

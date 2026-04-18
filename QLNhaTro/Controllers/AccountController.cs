@@ -48,7 +48,7 @@ namespace QLNhaTro.Controllers
             if (_context.NguoiThues.Any(x => x.CCCD == username))
             {
                 HttpContext.Session.SetString("Role", "Tenant");
-                return RedirectToAction("Index", "TenantPhong");
+                return RedirectToAction("Index", "Tenant");
             }
 
             return RedirectToAction("Login");

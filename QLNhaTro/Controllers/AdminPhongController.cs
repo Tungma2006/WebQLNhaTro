@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QLNhaTro.Data;
 using QLNhaTro.Models;
 using QLNhaTro.Services;
 
 namespace QLNhaTro.Controllers
 {
-    public class AdminPhongController : Controller
+    public class AdminPhongController : BaseController
     {
         private readonly PhongService _service;
+        private readonly NhaTroDbContext _context;
 
-        public AdminPhongController(PhongService service)
+        public AdminPhongController(NhaTroDbContext context, PhongService service) : base(context)
         {
             _service = service;
         }
 
         public IActionResult Index(string keyword)
         {
+            LoadThongBao();
             var data = _service.Search(keyword);
             ViewBag.Keyword = keyword;
             return View(data);
